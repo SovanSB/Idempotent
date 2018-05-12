@@ -137,11 +137,11 @@ maxRow <- function(ordMatr, numbers) {
   maxNum
 }
 
-nextmatr <- function(A, p, q, prev=NULL, selected=NULL, sorted=NULL,  
-                     plus=max, mult=add, deg=div, 
-                     zero=-Inf, identity=0, inv=maxplusinv,
-                     pplus=pmax, less=maxplusless,
-                     ordering=ordmin, maxRow=maxRowN, decreasing=T) {
+nextmatr <- function(A, p, q, prev=NULL, 
+                     selected=NULL, sorted=NULL, plus=max,  
+                     mult=add, deg=div, zero=-Inf, identity=0,
+                     inv=maxplusinv, pplus=pmax, less=maxplusless,
+                     orderingN=ordering, maxRowN=maxRow, decreasing=F) {
   maxVariants <- 1
   n <- ncol(A)
   quantity <- 0
@@ -168,14 +168,14 @@ nextmatr <- function(A, p, q, prev=NULL, selected=NULL, sorted=NULL,
       }
       fut <- fut[-pnull]
     }
-    sorted <- ordering(pmodify(A, p, mult, inv), plus, zero)
+    sorted <- orderingN(pmodify(A, p, mult, inv), plus, zero)
   }
   
   ll <- NULL
 
   
   if (length(fut) > 1) {
-    best <- maxRow(sorted, fut)
+    best <- maxRowN(sorted, fut)
     if (best < 1) print("Error, best < 1")
     if (best > n) print("Error, best > n")
     for (j in 1:n) {
@@ -193,7 +193,7 @@ nextmatr <- function(A, p, q, prev=NULL, selected=NULL, sorted=NULL,
           res <- nextmatr(
             A, p, q, c(prev,toDel), c(selected, rep(j, count)), sorted,
             plus, mult, deg, zero, identity, inv, pplus, less,
-            ordering, maxRow, decreasing
+            orderingN, maxRowN, decreasing
             )
           ll <- cbind(ll, res[[1]])
           quantity <- quantity + res[[2]]
